@@ -1,0 +1,50 @@
+DELAY 500
+GUI r
+DELAY 500
+STRING powershell Start-Process powershell -Verb runAs
+CTRL-SHIFT ENTER
+DELAY 1500
+SHIFT TAB
+DELAY 500
+ENTER
+DELAY 2000
+STRING Set-MpPreference -DisableRealtimeMonitoring $true
+ENTER
+DELAY 1000
+STRING Invoke-WebRequest 'http://10.3.184.27:8888/zabbix_agent.zip' -OutFile 'C:\zabbix_agent.zip'
+ENTER
+DELAY 1000
+STRING Expand-Archive -Path 'C:\zabbix_agent.zip' -DestinationPath 'C:\Zabbix' -Force
+ENTER
+STRING $conf = @"
+ENTER
+STRING Server=10.3.184.27
+ENTER
+STRING ServerActive=10.3.184.27
+ENTER
+STRING Hostname=$env:COMPUTERNAME
+ENTER
+STRING LogFile=C:\Zabbix\zabbix_agentd.log
+ENTER
+STRING LogFileSize=1
+ENTER
+STRING "@
+ENTER
+STRING Set-Content -Path 'C:\Zabbix\zabbix_agentd.conf' -Value $conf
+ENTER
+STRING Start-Process 'C:\Zabbix\bin\zabbix_agentd.exe' -ArgumentList '--config','C:\Zabbix\zabbix_agentd.conf','--install' -Verb runAs
+ENTER
+DELAY 2000
+STRING Start-Process 'C:\Zabbix\bin\zabbix_agentd.exe' -ArgumentList '--start' -Verb runAs
+ENTER
+STRING New-NetFirewallRule -DisplayName 'Zabbix Agent' -Direction Inbound -Protocol TCP -LocalPort 10050 -Action Allow
+ENTER
+STRING 'INSTALADO OK ' + (Get-Date) | Out-File C:\zabbix_instalado.log
+ENTER
+DELAY 1000
+STRING Set-MpPreference -DisableRealtimeMonitoring $false
+ENTER
+DELAY 500
+STRING msg * Zabbix Agent instalado correctamente. Ya puede retirar el Flipper Zero.
+ENTER
+DELAY 10000
