@@ -42,4 +42,6 @@ Esta automatización ayuda a:
 ## 📜 Licencia
 
 MIT
+- 🛡️ [Instalador automático de Zabbix y Wazuh con Flipper Zero](https://github.com/JoseCalfullan/flipper-windows-agent-installer)  
+  > Automatización para enrolar equipos Windows usando Flipper Zero como BadUSB.
 
